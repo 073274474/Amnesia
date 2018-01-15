@@ -1,0 +1,58 @@
+class sound{
+  
+  //method that plays sounds
+  static void playSound(File Sound){
+    //if statment determines if the user has opted for sound
+    if (sound == true){
+      try{
+        //creates and plays audio clip
+        Clip clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(Sound));
+        clip.start();
+      }catch(Exception e)
+      {
+      }
+    }//end if
+  }//end of playSound method
+
+  //Method that plays music
+  static void playMusic(){
+    //Creates runnable that can run indepentantly of the main program
+    Runnable r = new Runnable() {
+      //Method that runs seperately
+      public void run(){
+        //While loop that keeps the music playing
+        while(true){
+          //Do while loop that plays music until music is turned off by user
+          do{
+            try{
+              //Creates and plays clip of the game music
+              int originalControlNum = controlNum;
+              Clip clip = AudioSystem.getClip();
+              clip.open(AudioSystem.getAudioInputStream(music.get(1)));
+              clip.start();
+              
+              //Takes music playing time and reruns the music when the music is over
+              long startTime = System.currentTimeMillis();
+              long endTime = System.currentTimeMillis() + (clip.getMicrosecondLength()/1000);
+              while(System.currentTimeMillis() <= endTime){
+                if (controlNum!=originalControlNum){
+                  System.out.println("in: "+controlNum);
+                  clip.close();
+                  clip.open(AudioSystem.getAudioInputStream(music.get(controlNum)));
+                  clip.setMicrosecondPosition((System.currentTimeMillis()-startTime)*1000);
+                  clip.start();
+                }
+                originalControlNum = controlNum;
+              }
+              clip.close();
+            }catch(Exception e){}
+          }while(true);//end of do while
+        }//end of while loop
+      }//end of run method
+    };//end of runnable
+    //starts thread
+    new Thread(r).start();
+  }//end of playMusic method
+  
+}
