@@ -1,0 +1,54 @@
+class gem{
+  
+  static int x;
+  static int y;
+  static boolean collected;
+  
+  //constructor
+  public gem (int x, int y){
+    this.x = x;
+    this.y = y;
+    this.collected = false;
+  }
+  
+  public void setCollected(){
+    collected = true;
+  }
+  
+  public int getX(){
+    return this.x;
+  }
+  
+  public int getY(){
+    return this.y;
+  }
+  
+  public int sendAway(int playerX, int playerY){
+    int distX = Math.abs(x-playerX);
+    int distY = Math.abs(y-playerY);
+    
+    if (distX>distY){
+      if (playerX<x){
+        return 1;
+      }else{
+        return 2;
+      }
+    }else{
+      if (playerY>y){
+        return 3;
+      }else{
+        return 4;
+      }
+    }
+  }
+  
+  public int distance(int playerX, int playerY){
+    int distX = Math.abs(x-playerX);
+    int distY = Math.abs(y-playerY);
+    
+    int dist = (int)Math.sqrt((distX*distX)+(distY*distY));
+    return dist;
+  }
+}
+  
+  
