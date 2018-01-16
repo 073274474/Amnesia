@@ -25,9 +25,7 @@ class PlayerSprite2 {
 //This class represents the game window
 class GameWindow extends JFrame { 
   
-  JPanel narrPanel;
-  JPanel statsPanel;
-  JButton exitButton; 
+  JPanel main;
   
   //Window constructor
   public GameWindow() { 
@@ -35,25 +33,55 @@ class GameWindow extends JFrame {
     this.setUndecorated(true);
     setResizable(true);  // set my window to allow the user to resize it
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // set the window up to end the program when closed
-    getContentPane().add( new GamePanel());
+    
+    main = new JPanel();
+    
+    main.add(new GamePanel());
+    main.add(new NarrPanel());
+    
+    this.add(main);
     pack(); //makes the frame fit the contents
     setVisible(true);
-    
-    //narrator class return string
-    narrPanel = new JPanel();
-    statsPanel = new JPanel();  
         
   }
   
-  
+  static class NarrPanel extends JPanel{
+   
+    JTextArea textArea;
+    Narrator narr;
+    String[] words;
+    
+    NarrPanel(){
+            
+      narr = new Narrator();
+      try{
+      narr.textReader();
+      }catch(Exception e){
+        System.out.println("textreader failed");
+      }
+      
+      textArea = new JTextArea();
+      words = narr.startDialogue();
+      for (int i = 0; i < words.length; i++){
+        textArea.append(words[i]);
+        System.out.println(words[i]);
+      }
+      
+      this.add(textArea);
+      
+    }
+    
+  }
+    
   
 // An inner class representing the panel on which the game takes place
-  static class GamePanel extends JPanel implements KeyListener{
+  static class GamePanel extends JPanel implements KeyListener{ 
     
     Map map;  
     Player player;
     int size;
-    
+    Crystal crystal;
+       
     //constructor
     public GamePanel() { 
       size = 500;
@@ -63,6 +91,8 @@ class GameWindow extends JFrame {
       requestFocusInWindow();
       player = new Player();
       map = new Map(1024,768, player);
+      
+   
             
     }
     
@@ -73,9 +103,8 @@ class GameWindow extends JFrame {
       player.update();
       //draw the screen
       map.draw(g);
-      
+     // crystal.draw(g, 72, 72);
       player.draw(g);
-      
       repaint();
     }
    
@@ -141,15 +170,15 @@ class Map {
   Tile worldMap[][];
   
   public Map(int xResolution,int yResolution, Player player) { 
-    visibleWidth=5; //The size of the visible portion of the map
-    visibleHeight=5;  
+    visibleWidth=10; //The size of the visible portion of the map
+    visibleHeight=10;  
    
     this.player = player;
-    playerX = 15;
-    playerY = 15;
+    playerX = map[1].length/2;
+    playerY = map.length/2;
     
-    boxWidth = xResolution/10;
-    boxHeight = yResolution/10;
+    boxWidth = 50;
+    boxHeight = 50;
     createWorldMap();
         
   }
@@ -192,7 +221,7 @@ class Map {
         if (map[j][i]==0){
             worldMap[j][i]=new Tile(Color.BLUE,(i-1)*boxWidth, (j-1)*boxHeight,boxWidth,boxHeight);
         }else if (map[j][i]==1){
-            worldMap[j][i]=new Tile(Color.RED,(i-1)*boxWidth, (j-1)*boxHeight,boxWidth,boxHeight);
+            worldMap[j][i]=new Tile(Color.BLACK,(i-1)*boxWidth, (j-1)*boxHeight,boxWidth,boxHeight);
         }else if (map[j][i]==2) {
             worldMap[j][i]=new Tile(Color.BLACK,(i-1)*boxWidth, (j-1)*boxHeight,boxWidth,boxHeight);
         }
@@ -225,13 +254,9 @@ class Map {
     
     for (int j = 0; j < visibleHeight; j++){
       drawY = playerY-visibleHeight/2+j;
-     // System.out.println(drawY);
       for (int i = 0; i < visibleWidth; i++){
         drawX = playerX-visibleWidth/2+i;
-       // System.out.println(drawX);
-        //only works when playerY/playerX is >2x visibleHeight
-        //if ((playerY > (2*visibleHeight)) && (playerX > (2*visibleWidth))){
-          worldMap[drawY][drawX].draw(g, j, i); 
+         worldMap[drawY][drawX].draw(g, j, i); 
         
       }
     }
@@ -257,100 +282,3 @@ class Tile {
   }
 }
 
-//
-//class Player { 
-//  static int xPos, yPos; 
-//  String direction;
-//  BufferedImage[] sprites;
-//  int currentSprite;
-//  int currentStep;
-//  
-//  
-//  public Player() { 
-//    loadSprites();
-//    currentSprite=0;
-//    currentStep=0;
-//    this.xPos=250;
-//    this.yPos=250;
-//    this.direction="stand";
-//  }
-//  
-//  public void loadSprites() { 
-//    try {
-//      BufferedImage sheet = ImageIO.read(new File("spriteSheet.png"));
-//      
-//      final int width = 100;
-//      final int height = 135;
-//      final int rows = 4;
-//      final int cols = 3;
-//      sprites = new BufferedImage[rows * cols];
-//      
-//      for (int j = 0; j < rows; j++)
-//        for (int i = 0; i < cols; i++)
-//        sprites[(j * cols) + i] = sheet.getSubimage(i * width,j * height,width,height);
-//    } catch(Exception e) { System.out.println("error loading sheet");};
-//  }
-//  
-//  public void draw(Graphics g) { 
-//    g.drawImage(sprites[currentSprite],xPos,yPos,null);
-//  }
-//  
-//  public void update() { 
-//    
-//    if (currentStep>=128) {
-//      currentStep=0;
-//      direction="stand";
-//    }
-//    
-//    if(direction.equals("down")) { 
-//      currentSprite++;
-//      currentStep++;
-//      if (currentSprite>=2) {
-//        currentSprite=0;
-//      } 
-//    }
-//    
-//    if(direction.equals("left")) { 
-//      currentSprite++;
-//      currentStep++;
-//      if (currentSprite>=5) {
-//        currentSprite=3;
-//      } 
-//    }
-//    
-//    if(direction.equals("right")) { 
-//      currentSprite++;
-//      currentStep++;
-//      if (currentSprite>=8) {
-//        currentSprite=6;
-//      } 
-//    }
-//    
-//    if(direction.equals("up")) { 
-//      currentSprite++;
-//      currentStep++;
-//      if (currentSprite>=11) {
-//        currentSprite=9;
-//      } 
-//    }
-//    
-//  }
-//  
-//  public void move(String movement) { 
-//    
-//    if (currentStep==0 && direction.equals("stand")) { //not moving
-//      currentStep++;
-//      direction=movement;
-//      if(movement.equals("left")) {       
-//        currentSprite=0;
-//      } else if(movement.equals("up")) {
-//        currentSprite=2;
-//      } else if(movement.equals("right")) {
-//        currentSprite=5;
-//      } else if(movement.equals("down")) {
-//        currentSprite=8;
-//      }
-//    }
-//  }
-//  
-//}
