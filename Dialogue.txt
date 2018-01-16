@@ -1,0 +1,30 @@
+0...ugh...where am I?
+0...Who am I?
+1use the arrow keys to move around.
+1touch objects to pick them up.
+2If you are reading this, you are very, very far from home. Only the bravest enter this cavern, and for your bravery, you must be commended. However, only the strongest leave this cave, and for that...only time will tell.
+2Collect 7 gems, and maybe you’ll have a chance…
+3Psst. Hey! Can you hear me?
+0What? Where are you? Who are you?
+3Let’s not worry too hard about such...complicated questions. 
+3I can help you, but you gotta do exactly as I say. Walk forwards,
+3let me show you some things.
+3Good...That’s good. If you do what I tell you to, I’ll make you 
+3more powerful. This world, you see... it’s mine to control.
+3There are much more interesting things to your left. Try going that way.
+3That area is dangerous! Trust me, you’ll regret it if you go right.
+3Don’t go right! There’s nothing over there worth seeing!
+3The area to your right is a much more scenic! Try going that way. 
+3Avoid the part of the cave on your left. It would be foolish to disregard my advice
+3If you go left, you’ll die! There’s nothing you need over there!
+3You’ll find much more interesting things above you
+3Don’t go down, it’s not worth risking getting lost down there
+3It’s dangerous to go down in this cave. You must keep ascending if you wish to live!
+3You’re about to hit the top of the cave. Try going back down, I’m sure you’ll find something you like down there
+3Going up any further might jeopardize your safety here. I recommend going down
+3Don’t go up! It’s dangerous to be so high up. Go down lower where it’s safe.
+3Disobeying me is a mistake. Please listen more carefully in the future
+3I control this world. Your future here depends on me. Don’t make the mistake of getting on my bad side
+3My patience is wearing thin for your disobedience. Notice you’re getting weaker? That’s what I can do. You can't escape me.
+3Your disobedience will now have serious consequences. I control where you go. Consider this your last warning.
+
