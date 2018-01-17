@@ -2,6 +2,7 @@ class gem{
   
   static int x;
   static int y;
+  BufferedImage[] sprites;
   static boolean collected;
   
   //constructor
@@ -52,6 +53,42 @@ class gem{
     
     int dist = (int)Math.sqrt((distX*distX)+(distY*distY));
     return dist;
+  }
+  
+  
+  public void loadSprites(){
+    try{
+      BufferedImage sheet = ImageIO.read(new File("crystals.png"));
+
+      //size of image:
+      final int width = 960;
+      final int height = 720;
+      final int rows = 2;
+      final int cols = 4;
+      sprites = new BufferedImage[6];
+
+      //adding images from sheet to array
+
+      for (int j = 0; j < rows; j++){
+        for (int i = 0; i < cols; i++){
+          while((j*i) < 8){
+            sprites[(j * cols) + i] = sheet.getSubimage(i * width,j * height,width,height);
+          }
+        }
+      }
+      } catch(Exception e) { 
+      System.out.println("error loading sheet");
+    }
+  }
+    
+    
+  public void draw(Graphics g, int xMap, int yMap){
+    int x, y;
+    for (int i = 0; i <7; i ++){
+      x =((int)Math.floor(Math.random()*xMap));
+      y =((int)Math.floor(Math.random()*yMap));
+      g.drawImage(sprites[i], x, y, null);
+    }
   }
 }
   
