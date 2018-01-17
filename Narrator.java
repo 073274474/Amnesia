@@ -10,7 +10,7 @@ import java.io.IOException;
     int playerY = 0;
     int playerXLastInstruction = 0;
     int playerYLastInstruction = 0;
-    int controlNum = 0;
+    int controlNum = 50;
     int instructionDirection;
     ArrayList<gem> gemList = new ArrayList<>();
     
@@ -83,6 +83,10 @@ import java.io.IOException;
         return false;
       }
       
+    }
+    
+    public int getControlNum(){
+      return this.controlNum();
     }
   
     public gem getClosestGem(){
