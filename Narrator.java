@@ -14,38 +14,43 @@ import java.io.IOException;
     int instructionDirection;
     ArrayList<gem> gemList = new ArrayList<>();
     
-     String[] gameDialogue = new String[13];
-  String[][] directions = new String[4][3];
-  String[] angery = new String[5];
+    String[] gameDialogue = new String[13];
+    String[][] directions = new String[4][3];
+    String[] angery = new String[5];
     
     Narrator(){
       this.playerX = playerX;
       this.playerY = playerY;
-      
+      textReader();
     }
-  
-  public void textReader() throws IOException{
-    File dialogue = new File("Dialogue.txt");
-    Scanner readFile = new Scanner(dialogue);
-    String tempS = "";
-    
-    for (int i=0;i<13;i++){
-      gameDialogue[i] = readFile.nextLine();
-     // System.out.println(gameDialogue[i]);
-    }
-    
-    for (int i=0;i<4;i++){
-      for(int j=0;j<3;j++){
-        tempS=readFile.nextLine();
-        directions[i][j] = tempS.substring(1);
+
+    public void textReader() throws IOException{
+      File dialogue = new File("Dialogue.txt");
+      Scanner readFile = new Scanner(dialogue);
+      String tempS = "";
+
+      for (int i=0;i<13;i++){
+        gameDialogue[i] = readFile.nextLine();
+       // System.out.println(gameDialogue[i]);
       }
+
+      for (int i=0;i<4;i++){
+        for(int j=0;j<3;j++){
+          tempS=readFile.nextLine();
+          directions[i][j] = tempS.substring(1);
+        }
+      }
+
+      for (int i=0;i<4;i++){
+        tempS = readFile.nextLine();
+        angery[i] = tempS.substring(1);
+      } 
     }
     
-    for (int i=0;i<4;i++){
-      tempS = readFile.nextLine();
-      angery[i] = tempS.substring(1);
-    } 
-  }
+    
+    public setGemList(ArrayList<gem> GL){
+      gemList = GL;
+    }
 
     
     public String[] startDialogue(){
