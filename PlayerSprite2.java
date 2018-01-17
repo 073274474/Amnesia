@@ -54,11 +54,6 @@ class GameWindow extends JFrame {
     NarrPanel(){
             
       narr = new Narrator();
-      try{
-      narr.textReader();
-      }catch(Exception e){
-        System.out.println("textreader failed");
-      }
       
       textArea = new JTextArea();
       words = narr.startDialogue();
