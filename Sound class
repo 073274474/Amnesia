@@ -36,10 +36,16 @@ class sound{
               long startTime = System.currentTimeMillis();
               long endTime = System.currentTimeMillis() + (clip.getMicrosecondLength()/1000);
               while(System.currentTimeMillis() <= endTime){
+                
+                
+                //Figure this out
+                //controlNum = Whatever.getControlNum();
+                
+                
                 if (controlNum!=originalControlNum){
-                  System.out.println("in: "+controlNum);
+                  //System.out.println("in: "+controlNum);
                   clip.close();
-                  clip.open(AudioSystem.getAudioInputStream(music.get(controlNum)));
+                  clip.open(AudioSystem.getAudioInputStream(music.get(interpretCN(controlNum))));
                   clip.setMicrosecondPosition((System.currentTimeMillis()-startTime)*1000);
                   clip.start();
                 }
@@ -54,5 +60,25 @@ class sound{
     //starts thread
     new Thread(r).start();
   }//end of playMusic method
+  
+  void interpretCN(int CN){
+    
+    if (CN>60){
+      return 6;
+    }else if(CN>50){
+      return 5;
+    }else if(CN>40){
+      return 4;
+    }else if(CN>30){
+      return 3;
+    }else if(CN>20){
+      return 2;
+    }else if(CN>10){
+      return 1;
+    }else{
+      return 0;
+    }
+    
+  }
   
 }
