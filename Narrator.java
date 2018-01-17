@@ -58,10 +58,15 @@ import java.io.IOException;
     
     
     public String command(){
+      
       gem closestGem;
       closestGem = getClosestGem();
+      
       instructionDirection = closestGem.sendAway(playerX,playerY);
+      setPlayerLastInstruction(playerX,playerY);
+      
       return(directions[instructionDirection][howAngery(controlNum)]);
+
     }
     
     public boolean getObeyed(){
@@ -98,6 +103,11 @@ import java.io.IOException;
       playerX = x;
       playerY = y;
       controlNum = cN;
+    }
+    
+    public void setPlayerLastInstruction(int x, int y){
+      playerXLastInstruction = x;
+      playerYLastInstruction = y;
     }
     
     public int howAngery(int cN){
