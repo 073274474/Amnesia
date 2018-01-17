@@ -8,7 +8,10 @@ import java.io.IOException;
   class Narrator{
     int playerX = 0;
     int playerY = 0;
+    int playerXLastInstruction = 0;
+    int playerYLastInstruction = 0;
     int controlNum = 0;
+    int instructionDirection;
     ArrayList<gem> gemList = new ArrayList<>();
     
      String[] gameDialogue = new String[13];
@@ -56,10 +59,25 @@ import java.io.IOException;
     
     public String command(){
       gem closestGem;
-      int instructionDirection;
       closestGem = getClosestGem();
-      instructionDirection = closestGem.sendAway(playerX,playerY);     
+      instructionDirection = closestGem.sendAway(playerX,playerY);
       return(directions[instructionDirection][howAngery(controlNum)]);
+    }
+    
+    public boolean getObeyed(){
+      
+      if (instructionDirection==0&&playerX<playerXLastInstruction){
+        return true;
+      }else if(instructionDirection==1&&playerX>playerXLastInstruction){
+        return true;
+      }else if(instructionDirection==2&&playerY>playerYLastInstruction){
+        return true;
+      }else if(instructionDirection==3&&playerY>playerYLastInstruction){
+        return true;
+      }else{
+        return false;
+      }
+      
     }
   
     public gem getClosestGem(){
@@ -67,7 +85,7 @@ import java.io.IOException;
         gem closestGem = gemList.get(0);
         
         for (int i=1;i<gemList.size();i++){
-          if (closestGem.distance(playerX,playerY)>gemList.get(i).distance(playerX,playerY)){
+          if (closestGem.distance(playerX,playerY)>gemList.get(i).distance(playerX,playerY)&&!gemList.get(i).getCollected()){
             closestGem = gemList.get(i);
           }
         }
