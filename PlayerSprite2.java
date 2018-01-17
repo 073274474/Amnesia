@@ -51,9 +51,17 @@ class GameWindow extends JFrame {
     Narrator narr;
     String[] words;
     
+  static class NarrPanel extends JPanel{
+   
+    JTextArea textArea;
+    Narrator narr;
+    String[] words;
+    
     NarrPanel(){
             
       narr = new Narrator();
+      
+      Sound.playMusic(narr);
       
       textArea = new JTextArea();
       words = narr.startDialogue();
