@@ -12,7 +12,7 @@ class Narrator{
   int playerYLastInstruction = 0;
   int controlNum = 50;
   int instructionDirection;
-  ArrayList<gem> gemList = new ArrayList<>();
+  ArrayList<Gem> gemList = new ArrayList<>();
   
   String[] gameDialogue = new String[13];
   String[][] directions = new String[4][3];
@@ -106,6 +106,7 @@ class Narrator{
         
       }
     };
+    new Thread(r).start();
   }
   
   public int getControlNum(){
@@ -126,10 +127,9 @@ class Narrator{
     
   }
   
-  public void setPlayer(int x, int y, int cN){
+  public void setPlayer(int x, int y){
     playerX = x;
     playerY = y;
-    controlNum = cN;
   }
   
   public void setPlayerLastInstruction(int x, int y){
