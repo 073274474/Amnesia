@@ -1,152 +1,318 @@
+/**
+ * january 9, 2018
+ * adi gelb
+ * basic movement
+ * requires map.txt and spriteSheet.png
+ * errors: breaks when it hits the edge, only moves one tile at a time, movement is wonky (switch to keyPressed) 
+ */
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*; 
+import java.util.Scanner;
+import java.awt.image.*;
+import javax.imageio.*;
 
-import java.util.*;
-import java.io.*;
-import java.io.IOException;
-
-
-
-class Narrator{
-  int playerX = 0;
-  int playerY = 0;
-  int playerXLastInstruction = 0;
-  int playerYLastInstruction = 0;
-  int controlNum = 50;
-  int instructionDirection;
-  ArrayList<Gem> gemList = new ArrayList<>();
+//This class is used to start the program and manage the windows
+class PlayerSprite2 { 
   
-  String[] gameDialogue = new String[13];
-  String[][] directions = new String[4][3];
-  String[] angery = new String[5];
-  
-  Narrator(){
-    this.playerX = playerX;
-    this.playerY = playerY;
-    textReader();
+  public static void main(String[] args) { 
+    GameWindow game= new GameWindow();  
   }
-  
-  public void textReader(){
-    
-    try{
-      
-      File dialogue = new File("Dialogue.txt");
-      Scanner readFile = new Scanner(dialogue);
-      String tempS = "";
-      
-      for (int i=0;i<13;i++){
-        gameDialogue[i] = readFile.nextLine();
-        // System.out.println(gameDialogue[i]);
-      }
-      
-      for (int i=0;i<4;i++){
-        for(int j=0;j<3;j++){
-          tempS=readFile.nextLine();
-          directions[i][j] = tempS.substring(1);
-        }
-      }
-      
-      for (int i=0;i<4;i++){
-        tempS = readFile.nextLine();
-        angery[i] = tempS.substring(1);
-      }
-    }catch(IOException e){
-      e.printStackTrace();
-    }
-  }
-  
-  
-  public void setGemList(ArrayList<gem> GL){
-    gemList = GL;
-  }
-  
-  
-  public String[] startDialogue(){
-    for (int i = 0; i < gameDialogue.length; i ++){
-      System.out.println(gameDialogue[i]);
-    }
-    return gameDialogue;
-    
-  }
-  
-  
-  public String command(){
-    
-    gem closestGem;
-    closestGem = getClosestGem();
-    
-    instructionDirection = closestGem.sendAway(playerX,playerY);
-    setPlayerLastInstruction(playerX,playerY);
-    
-    return(directions[instructionDirection][howAngery(controlNum)]);
-    
-  }
-  
-  public void getObeyed(){
-    
-    Runnable r = new Runnable(){
-      
-      public void run() {
-        
-        try{
-          Thread.sleep(2000);
-        }catch (InterruptedException e){
-          e.printStackTrace();
-        }
-        
-        if (instructionDirection==0&&playerX<playerXLastInstruction){
-          controlNum++;
-        }else if(instructionDirection==1&&playerX>playerXLastInstruction){
-          controlNum++;
-        }else if(instructionDirection==2&&playerY>playerYLastInstruction){
-          controlNum++;
-        }else if(instructionDirection==3&&playerY>playerYLastInstruction){
-          controlNum++;
-        }else{
-          controlNum--;
-        }
-        
-      }
-    };
-    new Thread(r).start();
-  }
-  
-  public int getControlNum(){
-    return this.controlNum;
-  }
-  
-  public gem getClosestGem(){
-    
-    gem closestGem = gemList.get(0);
-    
-    for (int i=1;i<gemList.size();i++){
-      if (closestGem.distance(playerX,playerY)>gemList.get(i).distance(playerX,playerY)&&!gemList.get(i).getCollected()){
-        closestGem = gemList.get(i);
-      }
-    }
-    
-    return closestGem;
-    
-  }
-  
-  public void setPlayer(int x, int y){
-    playerX = x;
-    playerY = y;
-  }
-  
-  public void setPlayerLastInstruction(int x, int y){
-    playerXLastInstruction = x;
-    playerYLastInstruction = y;
-  }
-  
-  public int howAngery(int cN){
-    if (cN>40){
-      return 0;
-    }else if(cN>20){
-      return 1;
-    }else{
-      return 2;
-    }
-  }
-  
 }
 
 
+//This class represents the game window
+class GameWindow extends JFrame {
+  
+  JPanel main;
+  static Narrator narr = new Narrator();
+  Thread commands = new Thread(new GetCommands());
+  
+  //Window constructor
+  public GameWindow() { 
+    setTitle("player sprite 2");
+    this.setUndecorated(true);
+    //setResizable(true);  // set my window to allow the user to resize it
+    //setLocationRelativeTo(null);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // set the window up to end the program when closed
+    
+    main = new JPanel();
+    main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
+    main.add(new GamePanel());
+    
+    this.add(main);
+    pack(); //makes the frame fit the contents
+    setVisible(true);
+    
+  }
+  
+  static class NarrPanel extends JPanel{
+    
+    JTextArea textArea;
+    String[] words;
+    String text;
+    int num;
+    
+    public NarrPanel(){
+      
+      try{
+        narr.textReader();
+      }catch(Exception e){
+        System.out.println("textreader failed");
+      }
+      
+      Sound.playMusic(narr);
+      
+      num = 0;
+      textArea = new JTextArea();
+      words = narr.startDialogue();
+      JLabel label = new JLabel(words[num]);
+      label.setFont(new Font("Calibri", Font.PLAIN, 24));
+      this.add(label);
+      
+      ArrayList<gem> gemList = new ArrayList<>();
+      for(int i=0;i<7;i++){
+        Gem gem = new Gem(i,i);
+        gemList.add(gem);
+      }
+      narr.setGemList(gemList);
+      
+      this.setBackground(Color.BLACK);
+      this.add(textArea );
+    }
+    public int getCN(){
+      return narr.getControlNum();
+    }
+    
+    public Narrator getNarr(){
+      return narr;
+    }
+    
+  }
+  
+  
+// An inner class representing the panel on which the game takes place
+  static class GamePanel extends JPanel implements KeyListener{ 
+    
+    Map map;  
+    Player player;
+    int size;
+    Crystal crystal;
+    
+    //constructor
+    public GamePanel() { 
+      size = 500;
+      setPreferredSize(new Dimension(size,size));
+      addKeyListener(this);
+      setFocusable(true);
+      requestFocusInWindow();
+      player = new Player();
+      map = new Map(1024,768, player);
+      crystal = new Crystal();
+      
+      
+    }
+    
+    
+    public void paintComponent(Graphics g) { 
+      super.paintComponent(g); //required to ensure the panel si correctly redrawn
+      //update the content
+      player.update();
+      //draw the screen
+      map.draw(g);
+      // crystal.draw(g, 41, 41);
+      player.draw(g);
+      repaint();
+    }
+    
+    
+    public void keyTyped(KeyEvent e) {      
+    }
+    
+    public void keyPressed(KeyEvent e) {
+      if (player.direction.equals("stand")){
+        if(e.getKeyChar() == 'a' ){   //Good time to use a Switch statement
+          player.move("left");
+          if (map.checkMoveA(map.playerX, map.playerY) == true){
+            map.playerX--;
+          }
+        } else if(e.getKeyChar() == 's' ){
+          System.out.println("down");
+          player.move("down");
+          if (map.checkMoveS(map.playerX, map.playerY) == true){
+            map.playerY++;
+          }
+        } else if(e.getKeyChar() == 'd' ){
+          System.out.println("right");
+          player.move("right");
+          if (map.checkMoveD(map.playerX, map.playerY) == true){
+            map.playerX++;
+          }
+        } else if(e.getKeyChar() == 'w' ){
+          System.out.println("up");
+          player.move("up");
+          if (map.checkMoveW(map.playerX, map.playerY) == true){
+            map.playerY--;
+          }
+        }
+        System.out.println(narr.command());
+      }
+    }
+    
+    public void keyReleased(KeyEvent e) {
+      if (e.getKeyChar() =='a'){
+        // System.out.println("stop");
+      }else if (e.getKeyChar() == 's'){
+        // System.out.println("stop");
+      }else if (e.getKeyChar() =='d'){
+        // System.out.println("stop");
+      }else if (e.getKeyChar() =='w'){
+        // System.out.println("stop");
+      }
+    }  
+  }
+  
+  class GetCommands implements Runnable{
+    
+    public void run(){
+      try{
+        Thread.sleep(15000);
+      }catch(Exception e){}
+        System.out.print(narr.command());
+        
+    }
+  }
+}
+
+class Map {
+  boolean debug = true;
+  
+  int mapHeight;
+  int mapWidth;
+  int visibleWidth;
+  int visibleHeight;
+  
+  Player player;
+  int playerX, playerY;  //assigns player's place on map, not on screen
+  int map[][] = loadMapData("map.txt");
+  int boxWidth, boxHeight;
+  Tile worldMap[][];
+  
+  public Map(int xResolution,int yResolution, Player player) { 
+    visibleWidth=10; //The size of the visible portion of the map
+    visibleHeight=10;  
+    
+    this.player = player;
+    playerX = ((map[1].length/2)-2);
+    playerY = ((map.length/2)-2);
+    
+    boxWidth = 50;
+    boxHeight = 50;
+    createWorldMap();
+    
+  }
+  
+  public boolean checkMoveA(int playerX, int playerY){
+    if (((worldMap[playerY][playerX-1].colour).toString()).equals("java.awt.Color[r=0,g=0,b=0]")){
+      return false;
+    }
+    return true;
+  }
+  public boolean checkMoveS(int playerX, int playerY){
+    if (((worldMap[playerY+1][playerX].colour).toString()).equals("java.awt.Color[r=0,g=0,b=0]")){
+      return false;
+    }
+    return true;
+  }
+  public boolean checkMoveD(int playerX, int playerY){
+    if (((worldMap[playerY][playerX+1].colour).toString()).equals("java.awt.Color[r=0,g=0,b=0]")){
+      return false;
+    }
+    return true;
+  }
+  public boolean checkMoveW(int playerX, int playerY){
+    if (((worldMap[playerY-1][playerX].colour).toString()).equals("java.awt.Color[r=0,g=0,b=0]")){
+      return false;
+    }
+    return true;
+  }
+  
+  
+  
+  public void createWorldMap(){
+    worldMap = new Tile[map.length][map[1].length];
+    //int controlNum = narr.getN();
+    for (int j = 0; j < map.length; j++){
+      for (int i = 0; i < map[1].length; i++){
+        if (map[j][i]==0){
+          // if ((NarrPanel.getNarr()).getControlNum() <= 5){
+          worldMap[j][i]=new Tile(Color.BLUE,(i-1)*boxWidth, (j-1)*boxHeight,boxWidth,boxHeight);
+          //  }
+        }else if (map[j][i]==1){
+          worldMap[j][i]=new Tile(Color.BLACK,(i-1)*boxWidth, (j-1)*boxHeight,boxWidth,boxHeight);
+        }else if (map[j][i]==2) {
+          worldMap[j][i]=new Tile(Color.BLACK,(i-1)*boxWidth, (j-1)*boxHeight,boxWidth,boxHeight);
+        }else if (map[j][i] == 3){
+          //worldM
+        }else if (map[j][i] == 4){
+        }else if (map[j][i] == 5){
+        }else if (map[j][i] == 6){
+        }else if (map[j][i] == 7){
+        }
+      }
+    }
+  }
+  
+  
+  public int[][] loadMapData(String filename) { 
+    int data[][]=null;
+    try {                                      
+      File f = new File(filename);
+      Scanner input = new Scanner(f);
+      mapHeight = input.nextInt();
+      mapWidth = input.nextInt();
+      data = new int[mapHeight][mapWidth]; // first two line are map size
+      
+      for (int j=0;j<data.length;j++){
+        for (int i=0;i<data[0].length;i++)   {    
+          data[j][i]=input.nextInt();
+        }
+      }
+      input.close();    
+    } catch(Exception E){};
+    return data;
+  }
+  
+  public void draw(Graphics g) {
+    int drawY, drawX;
+    
+    for (int j = 0; j < visibleHeight; j++){
+      drawY = playerY-visibleHeight/2+j;
+      for (int i = 0; i < visibleWidth; i++){
+        drawX = playerX-visibleWidth/2+i;
+        worldMap[drawY][drawX].draw(g, j, i); 
+        
+      }
+    }
+  }
+}
+
+class Tile {
+  int xPosMap, yPosMap;
+  int width, height;
+  Color colour;
+  
+  public Tile(Color c, int x, int y, int w, int h){
+    colour = c;
+    xPosMap = x;
+    yPosMap = y;
+    width = w;
+    height = h;
+  }
+  
+  public void draw(Graphics g, int yScreen, int xScreen){
+    g.setColor(colour);
+    g.fillRect((xScreen)*width, (yScreen)*height, width-1, height-1);
+  }
+}
