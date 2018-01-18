@@ -62,6 +62,8 @@ class GameWindow extends JFrame {
         System.out.println("textreader failed");
       }
       
+      Sound.playMusic(narr);
+      
       num = 0;
       textArea = new JTextArea();
       words = narr.startDialogue();
