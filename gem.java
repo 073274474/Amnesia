@@ -1,3 +1,13 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.io.*; 
+import java.util.Scanner;
+import java.awt.image.*;
+import javax.imageio.*;
+
+
 class gem{
   
   static int x;
@@ -16,7 +26,7 @@ class gem{
     collected = true;
   }
   
-  public void getCollected(){
+  public boolean getCollected(){
     return this.collected;
   }
   
