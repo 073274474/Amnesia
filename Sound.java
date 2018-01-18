@@ -32,6 +32,7 @@ class Sound{
       //Method that runs seperately
       public void run(){
         
+        System.out.println("MUSIC");
         //loads all necessary music files
         loadMusic();
         
@@ -40,9 +41,11 @@ class Sound{
           
           //loop through checking if controlNum changed
           do{
+            
+            controlNum=interpretCN(narr.getControlNum());
             try{
               //Creates and plays clip of the game music
-              int originalControlNum = interpretCN(controlNum);
+              int originalControlNum = controlNum;
               Clip clip = AudioSystem.getClip();
               clip.open(AudioSystem.getAudioInputStream(music.get(1)));
               clip.start();
@@ -53,6 +56,7 @@ class Sound{
               while(System.currentTimeMillis() <= endTime){
                 
                 controlNum = interpretCN(narr.getControlNum());
+                System.out.println("CN:"+interpretCN(narr.getControlNum()));
                 
                 if (controlNum!=originalControlNum){
                   //System.out.println("in: "+controlNum);
