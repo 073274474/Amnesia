@@ -8,7 +8,7 @@ import java.awt.image.*;
 import javax.imageio.*;
 
 
-class gem{
+class Gem{
   
   static int x;
   static int y;
@@ -16,7 +16,7 @@ class gem{
   static boolean collected;
   
   //constructor
-  public gem (int x, int y){
+  public Gem (int x, int y){
     this.x = x;
     this.y = y;
     this.collected = false;
