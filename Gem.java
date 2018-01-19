@@ -43,7 +43,7 @@ class Gem{
     int distY = Math.abs(y-playerY);
     
     if (distX>distY){
-      if (playerX>x){
+      if (playerX<x){
         return 0;
       }else{
         return 1;
