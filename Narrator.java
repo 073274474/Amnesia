@@ -87,7 +87,7 @@ class Narrator{
       public void run() {
         
         try{
-          Thread.sleep(2000);
+          Thread.sleep(4000);
         }catch (InterruptedException e){
           e.printStackTrace();
         }
@@ -96,7 +96,7 @@ class Narrator{
           controlNum++;
         }else if(instructionDirection==1&&playerX>playerXLastInstruction){
           controlNum++;
-        }else if(instructionDirection==2&&playerY>playerYLastInstruction){
+        }else if(instructionDirection==2&&playerY<playerYLastInstruction){
           controlNum++;
         }else if(instructionDirection==3&&playerY>playerYLastInstruction){
           controlNum++;
