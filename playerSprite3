@@ -198,6 +198,7 @@ class GameWindow extends JFrame {
           }
           narr.setPlayer(map.playerX,map.playerY);
           collisionCheck();
+          winCheck();
         }
       }
       
@@ -212,6 +213,17 @@ class GameWindow extends JFrame {
           }
         }
       }
+      
+      public void winCheck(){
+        
+        for(int i=0;i<gemList.length;i++){
+          if (!gemList[i].collected){
+            thisFrame.dispose();
+            new Menu();
+          }
+        }
+      }
+      
     }
     
         class GetCommands implements Runnable{
