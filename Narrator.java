@@ -12,7 +12,7 @@ class Narrator{
   int playerYLastInstruction;
   int controlNum = 50;
   int instructionDirection;
-  ArrayList<Gem> gemList = new ArrayList<>();
+  Gem[] gemList;
   
   String[] gameDialogue = new String[13];
   String[][] directions = new String[4][3];
@@ -54,7 +54,7 @@ class Narrator{
   }
   
   
-  public void setGemList(ArrayList<gem> GL){
+  public void setGemList(Gem[] GL){
     gemList = GL;
   }
   
@@ -70,7 +70,7 @@ class Narrator{
   
   public String command(){
     
-    gem closestGem;
+    Gem closestGem;
     closestGem = getClosestGem();
     
     instructionDirection = closestGem.sendAway(playerX,playerY);
@@ -113,13 +113,13 @@ class Narrator{
     return this.controlNum;
   }
   
-  public gem getClosestGem(){
+  public Gem getClosestGem(){
     
-    gem closestGem = gemList.get(0);
+    Gem closestGem = gemList[0];
     
-    for (int i=1;i<gemList.size();i++){
-      if (closestGem.distance(playerX,playerY)>gemList.get(i).distance(playerX,playerY)&&!gemList.get(i).getCollected()){
-        closestGem = gemList.get(i);
+    for (int i=0;i<gemList.length;i++){
+      if (closestGem.distance(playerX,playerY)>gemList[i].distance(playerX,playerY)&&!gemList[i].getCollected()){
+        closestGem = gemList[i];
       }
     }
     
@@ -148,4 +148,5 @@ class Narrator{
   }
   
 }
+
 
