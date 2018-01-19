@@ -6,10 +6,10 @@ import java.io.IOException;
 
 
 class Narrator{
-  int playerX = 0;
-  int playerY = 0;
-  int playerXLastInstruction = 0;
-  int playerYLastInstruction = 0;
+  int playerX = 39;
+  int playerY = 39;
+  int playerXLastInstruction;
+  int playerYLastInstruction;
   int controlNum = 50;
   int instructionDirection;
   ArrayList<Gem> gemList = new ArrayList<>();
