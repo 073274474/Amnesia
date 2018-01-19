@@ -11,15 +11,18 @@ class Crystal{
   static int xPos, yPos;
   BufferedImage[] sprites;
   boolean taken;
-  Crystal[] crystals;
-    
+  Rectangle box;
+  int[][] locations;
+  
   Crystal(){
-    this.xPos = xPos;
-    this.yPos = yPos;
+    this.xPos = ((int)(Math.floor(Math.random()*500)));
+    this.yPos = ((int)(Math.floor(Math.random()*500)));
     this.taken = false;
+    this.box = new Rectangle(xPos, yPos, 240, 275); 
+    loadSprites();
   }
   
-  public int getNearCrystal(int cryRemain, int xPlayer, int yPlayer){
+/*  public int getNearCrystal(int cryRemain, int xPlayer, int yPlayer){
     int xDist;
     double r;
     int yDist;
@@ -44,43 +47,46 @@ class Crystal{
       }
     }
     return 0;
-  }
-  
-  public void makeCrystals(){
-    loadSprites();
-  }
+  }*/
 
     public void loadSprites(){
       try{
         BufferedImage sheet = ImageIO.read(new File("crystals.png"));
         
         //size of image:
-        final int width = 960;
-        final int height = 720;
+        final int width = 40;
+        final int height = 45;
         final int rows = 2;
         final int cols = 4;
-        sprites = new BufferedImage[6];
-        
-        //adding images from sheet to array
-        
+        sprites = new BufferedImage[(cols*rows)];
+       
         for (int j = 0; j < rows; j++){
           for (int i = 0; i < cols; i++){
-            while((j*i) < 8){
-              sprites[(j * cols) + i] = sheet.getSubimage(i * width,j * height,width,height);
-            }
+            sprites[(j * cols) + i] = sheet.getSubimage(i * width,j * height,width,height);
+            //System.out.println((j*cols)+i);
           }
         }
-        } catch(Exception e) { 
+      } catch(Exception e) { 
         System.out.println("error loading sheet");
       }
+    }    
+     
+    public void draw(Graphics g, int i){
+       g.drawImage(sprites[i], xPos, yPos, null);
     }
-    
-    public void draw(Graphics g, int xMap, int yMap){
-      int x, y;
-      for (int i = 0; i <7; i ++){
-        x =((int)Math.floor(Math.random()*xMap));
-        y =((int)Math.floor(Math.random()*yMap));
-        g.drawImage(sprites[i], x, y, null);
+       
+    class Box{
+      double xPosition, yPosition;
+      int height, width;
+      Rectangle boundingBox;
+      
+      public Rectangle Box(int x, int y, int w, int h){
+        xPosition = x;
+        yPosition = y;
+        width = w;
+        height = h;
+        boundingBox = new Rectangle((int)xPosition, (int)yPosition, width, height);
+        return boundingBox;
       }
     }
 

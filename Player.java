@@ -18,6 +18,7 @@ class Player{
   BufferedImage[] sprites;
   int currentSprite;
   int currentStep;
+  Rectangle box;
   
   static int controlNum;
    
@@ -25,10 +26,11 @@ class Player{
     loadSprites();
     currentSprite = 0;
     currentStep = 0;
-    this.xPos = 250;
-    this.yPos = 225;
+    this.xPos = 235;
+    this.yPos = 215;
     this.direction= "stand";
     this.controlNum = 50;
+    this.box = new Rectangle(xPos,yPos, 30, 60);
   }
     
     public void loadSprites(){
@@ -43,7 +45,6 @@ class Player{
         sprites = new BufferedImage[cols*rows];
         
         //adding images from sheet to array
-        
         for (int j = 0; j < rows; j++){
           for (int i = 0; i < cols; i++){
             sprites[(j * cols) + i] = sheet.getSubimage(i * width,j * height,width,height);
@@ -56,7 +57,11 @@ class Player{
     
     public void draw(Graphics g){
       g.drawImage(sprites[currentSprite], xPos, yPos, null);
+     // g.setColor(Color.BLUE);
+     // g.fillRect(xPos, yPos, 30, 60);
     }
+    
+ 
     
       public void update() { 
     
@@ -113,7 +118,25 @@ class Player{
       }
     }
   }   
+   
+    class Box{
+      double xPosition, yPosition;
+      int height, width;
+      Rectangle boundingBox;
+      
+      public Rectangle Box(int x, int y, int w, int h){
+        xPosition = x;
+        yPosition = y;
+        width = w;
+        height = h;
+        boundingBox = new Rectangle((int)xPosition, (int)yPosition, width, height);
+        return boundingBox;
+      }
+    }
       
   }
+
   
   
+  
+
