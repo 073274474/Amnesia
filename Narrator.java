@@ -1,103 +1,151 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+
 import java.util.*;
-import java.io.*; 
-import java.util.Scanner;
-import java.awt.image.*;
-import javax.imageio.*;
+import java.io.*;
+import java.io.IOException;
 
 
-class Gem{
+
+class Narrator{
+  int playerX = 39;
+  int playerY = 39;
+  int playerXLastInstruction;
+  int playerYLastInstruction;
+  int controlNum = 50;
+  int instructionDirection;
+  ArrayList<Gem> gemList = new ArrayList<>();
   
-  static int x;
-  static int y;
-  BufferedImage[] sprites;
-  static boolean collected;
+  String[] gameDialogue = new String[13];
+  String[][] directions = new String[4][3];
+  String[] angery = new String[5];
   
-  //constructor
-  public Gem (){
-    this.x = ((int)(Math.floor(Math.random()*500)));;
-    this.y = ((int)(Math.floor(Math.random()*500)));;
-    this.collected = false;
-    loadSprites();
+  Narrator(){
+    this.playerX = playerX;
+    this.playerY = playerY;
+    textReader();
   }
   
-  public void setCollected(){
-    collected = true;
-  }
-  
-  public boolean getCollected(){
-    return this.collected;
-  }
-  
-  public int getX(){
-    return this.x;
-  }
-  
-  public int getY(){
-    return this.y;
-  }
-  
-  public int sendAway(int playerX, int playerY){
-    int distX = Math.abs(x-playerX);
-    int distY = Math.abs(y-playerY);
+  public void textReader(){
     
-    if (distX<distY){
-      if (playerX<x){
-        return 0;
-      }else{
-        return 1;
-      }
-    }else{
-      if (playerY<y){
-        return 2;
-      }else{
-        return 3;
-      }
-    }
-  }
-  
-  public int distance(int playerX, int playerY){
-    int distX = Math.abs(x-playerX);
-    int distY = Math.abs(y-playerY);
-    
-    int dist = (int)Math.sqrt((distX*distX)+(distY*distY));
-    return dist;
-  }
-  
-  
-  public void loadSprites(){
     try{
-      BufferedImage sheet = ImageIO.read(new File("crystals.png"));
-
-      //size of image:
-      final int width = 960;
-      final int height = 720;
-      final int rows = 2;
-      final int cols = 4;
-      sprites = new BufferedImage[6];
-
-      //adding images from sheet to array
-
-      for (int j = 0; j < rows; j++){
-        for (int i = 0; i < cols; i++){
-          while((j*i) < 8){
-            sprites[(j * cols) + i] = sheet.getSubimage(i * width,j * height,width,height);
-          }
+      
+      File dialogue = new File("Dialogue.txt");
+      Scanner readFile = new Scanner(dialogue);
+      String tempS = "";
+      
+      for (int i=0;i<13;i++){
+        gameDialogue[i] = readFile.nextLine();
+        // System.out.println(gameDialogue[i]);
+      }
+      
+      for (int i=0;i<4;i++){
+        for(int j=0;j<3;j++){
+          tempS=readFile.nextLine();
+          directions[i][j] = tempS.substring(1);
         }
       }
-      } catch(Exception e) { 
-      System.out.println("error loading sheet");
+      
+      for (int i=0;i<4;i++){
+        tempS = readFile.nextLine();
+        angery[i] = tempS.substring(1);
+      }
+    }catch(IOException e){
+      e.printStackTrace();
     }
   }
   
   
-  public void draw(Graphics g, int i){
-    if(!collected){
-      g.drawImage(sprites[1], x, y, null); 
+  public void setGemList(ArrayList<gem> GL){
+    gemList = GL;
+  }
+  
+  
+  public String[] startDialogue(){
+    for (int i = 0; i < gameDialogue.length; i ++){
+      System.out.println(gameDialogue[i]);
+    }
+    return gameDialogue;
+    
+  }
+  
+  
+  public String command(){
+    
+    gem closestGem;
+    closestGem = getClosestGem();
+    
+    instructionDirection = closestGem.sendAway(playerX,playerY);
+    setPlayerLastInstruction(playerX,playerY);
+    
+    return(directions[instructionDirection][howAngery(controlNum)]);
+    
+  }
+  
+  public void getObeyed(){
+    
+    Runnable r = new Runnable(){
+      
+      public void run() {
+        
+        try{
+          Thread.sleep(4000);
+        }catch (InterruptedException e){
+          e.printStackTrace();
+        }
+        
+        if (instructionDirection==0&&playerX<playerXLastInstruction){
+          controlNum++;
+        }else if(instructionDirection==1&&playerX>playerXLastInstruction){
+          controlNum++;
+        }else if(instructionDirection==2&&playerY<playerYLastInstruction){
+          controlNum++;
+        }else if(instructionDirection==3&&playerY>playerYLastInstruction){
+          controlNum++;
+        }else{
+          controlNum--;
+        }
+        
+      }
+    };
+    new Thread(r).start();
+  }
+  
+  public int getControlNum(){
+    return this.controlNum;
+  }
+  
+  public gem getClosestGem(){
+    
+    gem closestGem = gemList.get(0);
+    
+    for (int i=1;i<gemList.size();i++){
+      if (closestGem.distance(playerX,playerY)>gemList.get(i).distance(playerX,playerY)&&!gemList.get(i).getCollected()){
+        closestGem = gemList.get(i);
+      }
+    }
+    
+    return closestGem;
+    
+  }
+  
+  public void setPlayer(int x, int y){
+    playerX = x;
+    playerY = y;
+  }
+  
+  public void setPlayerLastInstruction(int x, int y){
+    playerXLastInstruction = x;
+    playerYLastInstruction = y;
+  }
+  
+  public int howAngery(int cN){
+    if (cN>40){
+      return 0;
+    }else if(cN>20){
+      return 1;
+    }else{
+      return 2;
     }
   }
+  
 }
-  
-  
+
