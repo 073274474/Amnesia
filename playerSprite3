@@ -26,6 +26,7 @@ class PlayerSprite2 {
 class GameWindow extends JFrame { 
   static JFrame thisFrame;
   JPanel main;
+  static Narrator narr = new Narrator();
   
   //Window constructor
   public GameWindow() {
@@ -50,13 +51,11 @@ class GameWindow extends JFrame {
     class NarrPanel extends JPanel{
       
       JTextArea textArea;
-      Narrator narr;
       String[] words;
       JButton exitButton;
       
       public NarrPanel(){
         
-        narr = new Narrator();
         
         //Sound.playMusic(narr);
         
@@ -69,9 +68,15 @@ class GameWindow extends JFrame {
         textArea.append("blargh");
        // this.add(exitButton);
         this.add(textArea);
-        
+
+        ArrayList<gem> gemList = new ArrayList<>();
+        for(int i=0;i<7;i++){
+          Gem gem = new Gem(i,i);
+          gemList.add(gem);
+        }
+        narr.setGemList(gemList);
       }
-      
+
     }
     
     
@@ -193,6 +198,7 @@ class GameWindow extends JFrame {
           }else if (e.getKeyChar() == 'x'){
             thisFrame.dispose();
           }
+          narr.setPlayer(playerX,playerY);
         }
       }
       
