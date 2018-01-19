@@ -23,6 +23,7 @@ class HelpFrame extends JFrame{
   JPanel main;
   JLabel title;
   JLabel label;
+  JLabel[] labels;
   JLabel text;
   JButton backButton;
   JScrollPane scrollPane;
@@ -33,7 +34,7 @@ class HelpFrame extends JFrame{
     super("instructions");
     this.thisFrame = this;
     
-    this.setSize(500,500);
+    this.setSize(500,300);
     this.setLocationRelativeTo(null);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setUndecorated(true);
@@ -43,12 +44,23 @@ class HelpFrame extends JFrame{
     label = new JLabel("<HTML><H1><font color = 'white'>INSTRUCTIONS.</H1></HTML>");
     main.add(label);
     
+    labels = new JLabel[5];
+    
+    labels[0] = new JLabel("<HTML><H3><font color = 'white'>\n Use W, S, A & D to navigate up, down, left and right respectively. \n</H1></HTML>");
+    labels[1] = new JLabel("<HTML><H3><font color = 'white'>The goal is to collect all the gems.... \n</H1></HTML>");
+    labels[2] = new JLabel("<HTML><H3><font color = 'white'> Or is it? \n</H1></HTML>");
+    labels[3] = new JLabel("<HTML><H3><font color = 'white'>You may listen to the narrator.... or not. \n</H1></HTML>");
+    labels[4] = new JLabel("<HTML><H3><font color = 'white'> The choice is yours! </H1></HTML>");
+    
     backButton = new JButton("BACK.");
     backButton.addActionListener(new BackButtonListener());
     backButton.setBackground(Color.GREEN);
     backButton.setBorder(BorderFactory.createEmptyBorder()); 
     
     
+    for (int i = 0; i < labels.length; i ++){
+      main.add(labels[i]);
+    }
     main.add(backButton);
     this.add(main);
     this.setVisible(true);

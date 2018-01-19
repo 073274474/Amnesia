@@ -1,16 +1,16 @@
-0...ugh...where am I?
-0...Who am I?
-1use the arrow keys to move around.
-1touch objects to pick them up.
-2If you are reading this, you are very, very far from home. Only the bravest enter this cavern, and for your bravery, you must be commended. However, only the strongest leave this cave, and for that...only time will tell.
-2Collect 7 gems, and maybe you’ll have a chance…
-3Psst. Hey! Can you hear me?
-0What? Where are you? Who are you?
-3Let’s not worry too hard about such...complicated questions. 
-3I can help you, but you gotta do exactly as I say. Walk forwards,
-3let me show you some things.
-3Good...That’s good. If you do what I tell you to, I’ll make you 
-3more powerful. This world, you see... it’s mine to control.
+﻿you: ...ugh...where am I?
+you: ...Who am I?
+If you are reading this, you are very, very far from home. 
+Only the bravest enter this cavern, and for your bravery... 
+you must be commended. 
+However, only the strongest leave this cave, and for that...
+only time will tell.
+Collect 7 gems, and maybe you’ll have a chance…
+Psst. Hey! Can you hear me?
+oh, good! It's been so long....
+I can help you get out of here, but you gotta do exactly as I say.
+If you do what I tell you to, I’ll make you 
+more powerful. This world, it’s mine to control.
 3There are much more interesting things to your left. Try going that way.
 3That area is dangerous! Trust me, you’ll regret it if you go right.
 3Don’t go right! There’s nothing over there worth seeing!
@@ -27,4 +27,3 @@
 3I control this world. Your future here depends on me. Don’t make the mistake of getting on my bad side
 3My patience is wearing thin for your disobedience. Notice you’re getting weaker? That’s what I can do. You can't escape me.
 3Your disobedience will now have serious consequences. I control where you go. Consider this your last warning.
-
