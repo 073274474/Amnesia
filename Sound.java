@@ -70,7 +70,7 @@ class Sound{
                 
               }
               clip.close();
-            }catch(Exception e){}
+            }catch(Exception e){e.printStackTrace();}
           }while(true);//end of do while
         }//end of while loop
       }//end of run method
