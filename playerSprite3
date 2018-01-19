@@ -58,7 +58,7 @@ class GameWindow extends JFrame {
       public NarrPanel(){
         
         
-        //Sound.playMusic(narr);
+        Sound.playMusic(narr);
         
         textArea = new JTextArea();
         words = narr.startDialogue();
